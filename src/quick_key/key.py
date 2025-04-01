@@ -69,7 +69,7 @@ def readmode() -> Generator[None]:
     try:
         old_conf = termios.tcgetattr(stdin.fileno())
         new_conf = termios.tcgetattr(stdin.fileno())
-        new_conf[3] &= ~termios.ICANON & ~termios.ECHO & ~termios.C
+        new_conf[3] &= ~termios.ICANON & ~termios.ECHO
         termios.tcsetattr(stdin.fileno(), termios.TCSANOW, new_conf)
         yield None
     finally:
