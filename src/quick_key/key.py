@@ -69,7 +69,7 @@ def readmode() -> Generator[None]:
     try:
         old_conf = termios.tcgetattr(stdin.fileno())
         new_conf = termios.tcgetattr(stdin.fileno())
-        new_conf[3] &= ~termios.ICANON & ~termios.ECHO
+        new_conf[3] &= ~termios.ICANON & ~termios.ECHO & ~termios.C
         termios.tcsetattr(stdin.fileno(), termios.TCSANOW, new_conf)
         yield None
     finally:
@@ -92,6 +92,16 @@ def get_key() -> Key:
                 raise QuickKeyError
 
             match _getch():
+                case 'O':
+                    match _getch():
+                        case 'D':
+                            return Key.LEFT
+                        case 'C':
+                            return Key.RIGHT
+                        case 'A':
+                            return Key.UP
+                        case 'B':
+                            return Key.DOWN
                 case 'D':
                     return Key.LEFT
                 case 'C':
